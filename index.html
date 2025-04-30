@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Comprobante Nequi</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
@@ -96,8 +96,8 @@
 
     .texto-nombre {
       font-weight: 400;
-      top: 183.25px; /* Subido 1mm más abajo (3.75px) */
-      left: calc(20px + 0.7cm);
+      top: 179px;
+      left: calc(20px + 0.7cm - 2mm);
       width: 48%;
       color: #3B003B;
       text-transform: uppercase;
@@ -105,17 +105,32 @@
 
     .texto-valor {
       font-weight: 600;
-      top: 183.25px; /* Subido 1mm más abajo (3.75px) */
+      top: 194.5px;
       right: 20px;
       width: 32%;
       text-align: right;
       color: #D0007D;
+      pointer-events: none;
+    }
+
+    .texto-para {
+      position: absolute;
+      top: 210.34px;
+      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      color: #3B003B;
+    }
+
+    .decimales-pequenos {
+      font-size: 10px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Pantalla de inicio -->
+  <!-- Pantallas -->
   <div class="box" id="loginBox">
     <h2>Bienvenido</h2>
     <button onclick="mostrarIngreso()">Ingresar</button>
@@ -125,7 +140,6 @@
     </a>
   </div>
 
-  <!-- Ingreso de clave -->
   <div class="box hidden" id="ingresoBox">
     <h2>Ingresar</h2>
     <input type="password" id="claveInput" placeholder="Clave de acceso">
@@ -133,7 +147,6 @@
     <button onclick="volverInicio()">Volver</button>
   </div>
 
-  <!-- Cambio de clave -->
   <div class="box hidden" id="cambioClaveBox">
     <h2>Cambiar Clave</h2>
     <input type="password" id="adminClave" placeholder="Clave admin">
@@ -142,7 +155,6 @@
     <button onclick="volverInicio()">Volver</button>
   </div>
 
-  <!-- Formulario -->
   <div class="box hidden" id="formularioBox">
     <h2>Generar Comprobante</h2>
     <input type="text" id="nombreUsuario" placeholder="Nombre completo">
@@ -150,11 +162,12 @@
     <button onclick="generarComprobante()">Descargar Comprobante</button>
   </div>
 
-  <!-- Comprobante Final -->
+  <!-- Comprobante -->
   <div class="container hidden" id="captura">
     <img src="1.jpg" alt="Fondo comprobante" crossorigin="anonymous" />
     <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" />
-    <input type="text" class="texto-valor" id="valor" placeholder="-$0,00" />
+    <div class="texto-para">Para</div>
+    <div class="texto-valor" id="valor"></div>
   </div>
 
   <script>
@@ -215,16 +228,22 @@
       }
 
       const valorRaw = valorInput.replace(/[^\d]/g, "");
-      const valorFormateado = `-$${parseInt(valorRaw).toLocaleString("es-CO")},00`;
+      if (!valorRaw) {
+        alert("Valor inválido.");
+        return;
+      }
+
+      const numero = parseInt(valorRaw);
+      const entero = numero.toLocaleString("es-CO");
+      const valorHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
 
       const nombreField = document.getElementById("nombre");
       const valorField = document.getElementById("valor");
 
       nombreField.value = nombreUsuario.toUpperCase();
-      valorField.value = valorFormateado;
+      valorField.innerHTML = valorHTML;
 
       nombreField.disabled = true;
-      valorField.disabled = true;
 
       const captura = document.getElementById("captura");
       captura.classList.remove("hidden");
@@ -240,7 +259,6 @@
           link.click();
 
           nombreField.disabled = false;
-          valorField.disabled = false;
           captura.classList.add("hidden");
         });
       }, 300);
