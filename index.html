@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comprobante Nequi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+    }
+
+    .box {
+      background: #0d0d2b;
+      border-radius: 16px;
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px #00f0ff44;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00ffff;
+      margin-bottom: 30px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 15px;
+      font-size: 16px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    input {
+      background: #12123d;
+      color: white;
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    button {
+      background: #00bcd4;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #00e5ff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-top: 20px;
+    }
+
+    .container img {
+      width: 100%;
+      display: block;
+    }
+
+    .texto-nombre,
+    .texto-valor {
+      position: absolute;
+      font-family: 'Poppins', sans-serif;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .texto-nombre {
+      font-weight: 400;
+      top: 179px;
+      left: calc(20px + 0.7cm - 2mm);
+      width: 48%;
+      color: #3B003B;
+      text-transform: uppercase;
+    }
+
+    .texto-valor {
+      font-weight: 600;
+      top: 194.5px;
+      right: 20px;
+      width: 32%;
+      text-align: right;
+      color: #D0007D;
+      pointer-events: none;
+    }
+
+    .texto-para {
+      position: absolute;
+      top: 210.34px;
+      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      color: #3B003B;
+    }
+
+    .decimales-pequenos {
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantallas -->
+  <div class="box" id="loginBox">
+    <h2>Bienvenido</h2>
+    <button onclick="mostrarIngreso()">Ingresar</button>
+    <button onclick="mostrarCambioClave()">Cambiar Clave</button>
+    <a href="https://wa.me/573178793834" target="_blank">
+      <button>Contacto</button>
+    </a>
+  </div>
+
+  <div class="box hidden" id="ingresoBox">
+    <h2>Ingresar</h2>
+    <input type="password" id="claveInput" placeholder="Clave de acceso">
+    <button onclick="validarClave()">Entrar</button>
+    <button onclick="volverInicio()">Volver</button>
+  </div>
+
+  <div class="box hidden" id="cambioClaveBox">
+    <h2>Cambiar Clave</h2>
+    <input type="password" id="adminClave" placeholder="Clave admin">
+    <input type="password" id="nuevaClave" placeholder="Nueva clave">
+    <button onclick="cambiarClave()">Guardar</button>
+    <button onclick="volverInicio()">Volver</button>
+  </div>
+
+  <div class="box hidden" id="formularioBox">
+    <h2>Generar Comprobante</h2>
+    <input type="text" id="nombreUsuario" placeholder="Nombre completo">
+    <input type="text" id="valorUsuario" placeholder="-$0,00">
+    <button onclick="generarComprobante()">Descargar Comprobante</button>
+  </div>
+
+  <!-- Comprobante -->
+  <div class="container hidden" id="captura">
+    <img src="1.jpg" alt="Fondo comprobante" crossorigin="anonymous" />
+    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" />
+    <div class="texto-para">Para</div>
+    <div class="texto-valor" id="valor"></div>
+  </div>
+
+  <script>
+    let claveGuardada = localStorage.getItem("clave") || "142025";
+
+    function ocultarTodo() {
+      document.getElementById("loginBox").classList.add("hidden");
+      document.getElementById("ingresoBox").classList.add("hidden");
+      document.getElementById("cambioClaveBox").classList.add("hidden");
+      document.getElementById("formularioBox").classList.add("hidden");
+    }
+
+    function mostrarIngreso() {
+      ocultarTodo();
+      document.getElementById("ingresoBox").classList.remove("hidden");
+    }
+
+    function mostrarCambioClave() {
+      ocultarTodo();
+      document.getElementById("cambioClaveBox").classList.remove("hidden");
+    }
+
+    function volverInicio() {
+      ocultarTodo();
+      document.getElementById("loginBox").classList.remove("hidden");
+    }
+
+    function validarClave() {
+      const clave = document.getElementById("claveInput").value;
+      if (clave === claveGuardada) {
+        ocultarTodo();
+        document.getElementById("formularioBox").classList.remove("hidden");
+      } else {
+        alert("Clave incorrecta");
+      }
+    }
+
+    function cambiarClave() {
+      const admin = document.getElementById("adminClave").value;
+      const nueva = document.getElementById("nuevaClave").value;
+      if (admin === "1395" && nueva.trim()) {
+        localStorage.setItem("clave", nueva.trim());
+        claveGuardada = nueva.trim();
+        alert("Clave cambiada correctamente");
+        volverInicio();
+      } else {
+        alert("Clave admin incorrecta o nueva clave vacía");
+      }
+    }
+
+    function generarComprobante() {
+      const nombreUsuario = document.getElementById("nombreUsuario").value.trim();
+      const valorInput = document.getElementById("valorUsuario").value.trim();
+
+      if (!nombreUsuario || !valorInput) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
+
+      const valorRaw = valorInput.replace(/[^\d]/g, "");
+      if (!valorRaw) {
+        alert("Valor inválido.");
+        return;
+      }
+
+      const numero = parseInt(valorRaw);
+      const entero = numero.toLocaleString("es-CO");
+      const valorHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
+
+      const nombreField = document.getElementById("nombre");
+      const valorField = document.getElementById("valor");
+
+      nombreField.value = nombreUsuario.toUpperCase();
+      valorField.innerHTML = valorHTML;
+
+      nombreField.disabled = true;
+
+      const captura = document.getElementById("captura");
+      captura.classList.remove("hidden");
+
+      setTimeout(() => {
+        html2canvas(captura, {
+          scale: 4,
+          useCORS: true
+        }).then(canvas => {
+          const link = document.createElement("a");
+          link.download = "comprobante_nequi.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+
+          nombreField.disabled = false;
+          captura.classList.add("hidden");
+        });
+      }, 300);
+    }
+  </script>
+
+</body>
+</html>
+
