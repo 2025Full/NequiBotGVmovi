@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,7 +21,7 @@
 
     .box {
       background: #0d0d2b;
-      border-radius: 16px;
+      border-radius: 0;
       padding: 30px;
       width: 100%;
       max-width: 400px;
@@ -36,7 +37,7 @@
     input, button {
       width: 100%;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 0;
       border: none;
       margin-bottom: 15px;
       font-size: 16px;
@@ -73,7 +74,7 @@
       width: 100%;
       max-width: 390px;
       background: #fff;
-      border-radius: 20px;
+      border-radius: 0;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       margin-top: 20px;
@@ -126,6 +127,13 @@
     .decimales-pequenos {
       font-size: 10px;
     }
+
+    .fullscreen-btn {
+      background: #222;
+      color: white;
+      font-weight: normal;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -160,18 +168,34 @@
     <input type="text" id="nombreUsuario" placeholder="Nombre completo">
     <input type="text" id="valorUsuario" placeholder="-$0,00">
     <button onclick="generarComprobante()">Descargar Comprobante</button>
+    <button class="fullscreen-btn" onclick="verEnPantallaCompleta()">Ver en Pantalla Completa</button>
   </div>
 
   <!-- Comprobante -->
   <div class="container hidden" id="captura">
     <img src="1.jpg" alt="Fondo comprobante" crossorigin="anonymous" />
     <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" />
-    <div class="texto-para">Para</div>
+    <div class="texto-para" id="para">Para</div>
     <div class="texto-valor" id="valor"></div>
   </div>
 
   <script>
     let claveGuardada = localStorage.getItem("clave") || "142025";
+    const nombreEl = document.getElementById("nombre");
+    const valorEl = document.getElementById("valor");
+    const paraEl = document.getElementById("para");
+
+    const posicionesOriginales = {
+      nombreTop: "179px",
+      valorTop: "194.5px",
+      paraTop: "210.34px"
+    };
+
+    const posicionesFullscreen = {
+      nombreTop: "202.68px",
+      valorTop: "218.18px",
+      paraTop: "234.02px"
+    };
 
     function ocultarTodo() {
       document.getElementById("loginBox").classList.add("hidden");
@@ -263,8 +287,30 @@
         });
       }, 300);
     }
+
+    function verEnPantallaCompleta() {
+      const captura = document.getElementById("captura");
+      captura.classList.remove("hidden");
+
+      nombreEl.style.top = posicionesFullscreen.nombreTop;
+      valorEl.style.top = posicionesFullscreen.valorTop;
+      paraEl.style.top = posicionesFullscreen.paraTop;
+
+      if (captura.requestFullscreen) {
+        captura.requestFullscreen();
+      }
+    }
+
+    document.addEventListener("fullscreenchange", () => {
+      if (!document.fullscreenElement) {
+        // Volver a posiciones originales
+        nombreEl.style.top = posicionesOriginales.nombreTop;
+        valorEl.style.top = posicionesOriginales.valorTop;
+        paraEl.style.top = posicionesOriginales.paraTop;
+        document.getElementById("captura").classList.add("hidden");
+      }
+    });
   </script>
 
 </body>
 </html>
-
