@@ -86,25 +86,25 @@
     }
     .texto-nombre {
       font-weight: 400;
-      top: 216.8px;
-      left: calc(20px + 0.7cm - 2mm + 8px);
-      width: 48%;
+      top: calc(216.8px * var(--escala));
+      left: calc((20px + 0.7cm - 2mm + 8px) * var(--escala));
+      width: calc(48% * var(--escala));
       color: #3B003B;
       text-transform: uppercase;
     }
     .texto-valor {
       font-weight: 600;
-      top: 232.3px;
-      right: 28px;
-      width: 32%;
+      top: calc(232.3px * var(--escala));
+      right: calc(28px * var(--escala));
+      width: calc(32% * var(--escala));
       text-align: right;
       color: #D0007D;
       pointer-events: none;
     }
     .texto-para {
       position: absolute;
-      top: 248.14px;
-      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px);
+      top: calc(248.14px * var(--escala));
+      left: calc((20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px) * var(--escala));
       font-family: 'Inter', sans-serif;
       font-size: 10px;
       font-weight: 400;
@@ -113,13 +113,7 @@
     .decimales-pequenos {
       font-size: 10px;
     }
-    .fullscreen-btn {
-      background: #222;
-      color: white;
-      font-weight: normal;
-      margin-top: 10px;
-    }
-    /* Botón para ver el comprobante descargado */
+    /* Botones de pantalla completa */
     #verComprobanteDescargado {
       display: none;
       position: fixed;
@@ -191,9 +185,9 @@
   </div>
 
   <!-- Comprobante -->
-  <div class="container hidden" id="captura">
+  <div class="container hidden" id="captura" style="--escala: 1;">
     <img src="1.jpg" alt="Fondo comprobante" crossorigin="anonymous" />
-    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" />
+    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" readonly />
     <div class="texto-para" id="para">Para</div>
     <div class="texto-valor" id="valor"></div>
   </div>
@@ -322,6 +316,8 @@
     document.getElementById('verComprobanteDescargado').addEventListener('click', () => {
       const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
+      const escala = Math.min(window.innerWidth / 390, 1);
+
       if (!document.fullscreenElement) {
         if (comprobanteContainer.requestFullscreen) {
           comprobanteContainer.requestFullscreen();
@@ -331,7 +327,10 @@
           comprobanteContainer.msRequestFullscreen();
         }
         btn.textContent = "Salir de Pantalla Completa";
+
+        // Ajustar escala y posiciones
         comprobanteContainer.style.display = 'flex';
+        document.getElementById('captura').style.setProperty('--escala', `${1 / escala}`);
       } else {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -342,6 +341,7 @@
         }
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
+        document.getElementById('captura').style.setProperty('--escala', '1');
       }
     });
 
@@ -352,6 +352,7 @@
       if (!document.fullscreenElement) {
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
+        document.getElementById('captura').style.setProperty('--escala', '1');
       }
     });
   </script>
