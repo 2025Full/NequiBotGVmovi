@@ -77,6 +77,8 @@
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       margin-top: 20px;
+      transform-origin: top left;
+      transform: scale(1);
     }
 
     .container img {
@@ -96,8 +98,8 @@
 
     .texto-nombre {
       font-weight: 400;
-      top: 216.8px; /* Mantener la posición vertical */
-      left: calc(20px + 0.7cm - 2mm + 8px); /* Mover 2 mm (≈8 px) a la derecha */
+      top: 216.8px;
+      left: calc(20px + 0.7cm - 2mm + 8px);
       width: 48%;
       color: #3B003B;
       text-transform: uppercase;
@@ -105,8 +107,8 @@
 
     .texto-valor {
       font-weight: 600;
-      top: 232.3px; /* Mantener la posición vertical */
-      right: 28px; /* Mover 2 mm (≈8 px) a la izquierda */
+      top: 232.3px;
+      right: 28px;
       width: 32%;
       text-align: right;
       color: #D0007D;
@@ -115,8 +117,8 @@
 
     .texto-para {
       position: absolute;
-      top: 248.14px; /* Mantener la posición vertical */
-      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px); /* Mover 2 mm (≈8 px) a la derecha */
+      top: 248.14px;
+      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px);
       font-family: 'Inter', sans-serif;
       font-size: 10px;
       font-weight: 400;
@@ -167,7 +169,7 @@
     <input type="text" id="nombreUsuario" placeholder="Nombre completo">
     <input type="text" id="valorUsuario" placeholder="-$0,00">
     <button onclick="generarComprobante()">Descargar Comprobante</button>
-    <button class="fullscreen-btn" onclick="verEnPantallaCompleta()">Ver en Pantalla Completa</button>
+    <button class="fullscreen-btn" id="verPantallaCompleta">Ver en Pantalla Completa</button>
   </div>
 
   <!-- Comprobante -->
@@ -185,15 +187,15 @@
     const paraEl = document.getElementById("para");
 
     const posicionesOriginales = {
-      nombreTop: "216.8px", // Ajustado
-      valorTop: "232.3px",  // Ajustado
-      paraTop: "248.14px"   // Ajustado
+      nombreTop: "216.8px",
+      valorTop: "232.3px",
+      paraTop: "248.14px"
     };
 
     const posicionesFullscreen = {
-      nombreTop: "244.48px", // Ajustado
-      valorTop: "259.98px",  // Ajustado
-      paraTop: "275.82px"    // Ajustado
+      nombreTop: "244.48px",
+      valorTop: "259.98px",
+      paraTop: "275.82px"
     };
 
     function ocultarTodo() {
@@ -287,26 +289,55 @@
       }, 300);
     }
 
-    function verEnPantallaCompleta() {
-      const captura = document.getElementById("captura");
-      captura.classList.remove("hidden");
-
-      nombreEl.style.top = posicionesFullscreen.nombreTop;
-      valorEl.style.top = posicionesFullscreen.valorTop;
-      paraEl.style.top = posicionesFullscreen.paraTop;
-
-      if (captura.requestFullscreen) {
-        captura.requestFullscreen();
-      }
-    }
-
-    document.addEventListener("fullscreenchange", () => {
+    // Función de pantalla completa
+    document.getElementById('verPantallaCompleta').addEventListener('click', () => {
+      const btn = document.getElementById('verPantallaCompleta');
+      const contenedor = document.getElementById('captura');
       if (!document.fullscreenElement) {
-        // Volver a posiciones originales
+        if (contenedor.requestFullscreen) {
+          contenedor.requestFullscreen();
+        } else if (contenedor.webkitRequestFullscreen) {
+          contenedor.webkitRequestFullscreen();
+        } else if (contenedor.msRequestFullscreen) {
+          contenedor.msRequestFullscreen();
+        }
+        btn.textContent = "Salir de Pantalla Completa";
+
+        // Ajustar escala y posiciones
+        const escala = Math.min(window.innerWidth / 390, 1);
+        contenedor.style.transform = `scale(${1 / escala})`;
+        nombreEl.style.top = posicionesFullscreen.nombreTop;
+        valorEl.style.top = posicionesFullscreen.valorTop;
+        paraEl.style.top = posicionesFullscreen.paraTop;
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        btn.textContent = "Ver en Pantalla Completa";
+
+        // Restaurar escala y posiciones
+        contenedor.style.transform = 'scale(1)';
         nombreEl.style.top = posicionesOriginales.nombreTop;
         valorEl.style.top = posicionesOriginales.valorTop;
         paraEl.style.top = posicionesOriginales.paraTop;
-        document.getElementById("captura").classList.add("hidden");
+      }
+    });
+
+    // Detectar salida de pantalla completa
+    document.addEventListener('fullscreenchange', () => {
+      const btn = document.getElementById('verPantallaCompleta');
+      const contenedor = document.getElementById('captura');
+      if (!document.fullscreenElement) {
+        btn.textContent = "Ver en Pantalla Completa";
+        contenedor.style.transform = 'scale(1)';
+        nombreEl.style.top = posicionesOriginales.nombreTop;
+        valorEl.style.top = posicionesOriginales.valorTop;
+        paraEl.style.top = posicionesOriginales.paraTop;
+        contenedor.classList.add("hidden");
       }
     });
   </script>
