@@ -1,12 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <title>Comprobante Nequi</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
   <style>
     body {
       margin: 0;
@@ -97,8 +96,8 @@
 
     .texto-nombre {
       font-weight: 400;
-      top: 179px;
-      left: calc(20px + 0.7cm - 2mm);
+      top: 216.8px; /* Mantener la posición vertical */
+      left: calc(20px + 0.7cm - 2mm + 8px); /* Mover 2 mm (≈8 px) a la derecha */
       width: 48%;
       color: #3B003B;
       text-transform: uppercase;
@@ -106,8 +105,8 @@
 
     .texto-valor {
       font-weight: 600;
-      top: 194.5px;
-      right: 20px;
+      top: 232.3px; /* Mantener la posición vertical */
+      right: 28px; /* Mover 2 mm (≈8 px) a la izquierda */
       width: 32%;
       text-align: right;
       color: #D0007D;
@@ -116,8 +115,8 @@
 
     .texto-para {
       position: absolute;
-      top: 210.34px;
-      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px);
+      top: 248.14px; /* Mantener la posición vertical */
+      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px); /* Mover 2 mm (≈8 px) a la derecha */
       font-family: 'Inter', sans-serif;
       font-size: 10px;
       font-weight: 400;
@@ -143,7 +142,7 @@
     <h2>Bienvenido</h2>
     <button onclick="mostrarIngreso()">Ingresar</button>
     <button onclick="mostrarCambioClave()">Cambiar Clave</button>
-    <a href="https://wa.me/573178793834" target="_blank">
+    <a href="https://wa.me/573178793834 " target="_blank">
       <button>Contacto</button>
     </a>
   </div>
@@ -186,15 +185,15 @@
     const paraEl = document.getElementById("para");
 
     const posicionesOriginales = {
-      nombreTop: "179px",
-      valorTop: "194.5px",
-      paraTop: "210.34px"
+      nombreTop: "216.8px", // Ajustado
+      valorTop: "232.3px",  // Ajustado
+      paraTop: "248.14px"   // Ajustado
     };
 
     const posicionesFullscreen = {
-      nombreTop: "202.68px",
-      valorTop: "218.18px",
-      paraTop: "234.02px"
+      nombreTop: "244.48px", // Ajustado
+      valorTop: "259.98px",  // Ajustado
+      paraTop: "275.82px"    // Ajustado
     };
 
     function ocultarTodo() {
