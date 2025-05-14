@@ -86,25 +86,25 @@
     }
     .texto-nombre {
       font-weight: 400;
-      top: calc(216.8px * var(--escala));
-      left: calc((20px + 0.7cm - 2mm + 8px) * var(--escala));
-      width: calc(48% * var(--escala));
+      top: 216.8px;
+      left: calc(20px + 0.7cm - 2mm + 8px);
+      width: 48%;
       color: #3B003B;
       text-transform: uppercase;
     }
     .texto-valor {
       font-weight: 600;
-      top: calc(232.3px * var(--escala));
-      right: calc(28px * var(--escala));
-      width: calc(32% * var(--escala));
+      top: 232.3px;
+      right: 28px;
+      width: 32%;
       text-align: right;
       color: #D0007D;
       pointer-events: none;
     }
     .texto-para {
       position: absolute;
-      top: calc(248.14px * var(--escala));
-      left: calc((20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px) * var(--escala));
+      top: 248.14px;
+      left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px);
       font-family: 'Inter', sans-serif;
       font-size: 10px;
       font-weight: 400;
@@ -113,7 +113,13 @@
     .decimales-pequenos {
       font-size: 10px;
     }
-    /* Botones de pantalla completa */
+    .fullscreen-btn {
+      background: #222;
+      color: white;
+      font-weight: normal;
+      margin-top: 10px;
+    }
+    /* Botón para ver el comprobante descargado */
     #verComprobanteDescargado {
       display: none;
       position: fixed;
@@ -147,10 +153,15 @@
       max-width: 100%;
       max-height: 100%;
     }
+    @media (max-width: 420px) {
+      .container {
+        width: 100vw;
+        height: 100vh;
+      }
+    }
   </style>
 </head>
 <body>
-
   <!-- Pantallas -->
   <div class="box" id="loginBox">
     <h2>Bienvenido</h2>
@@ -160,14 +171,12 @@
       <button>Contacto</button>
     </a>
   </div>
-
   <div class="box hidden" id="ingresoBox">
     <h2>Ingresar</h2>
     <input type="password" id="claveInput" placeholder="Clave de acceso">
     <button onclick="validarClave()">Entrar</button>
     <button onclick="volverInicio()">Volver</button>
   </div>
-
   <div class="box hidden" id="cambioClaveBox">
     <h2>Cambiar Clave</h2>
     <input type="password" id="adminClave" placeholder="Clave admin">
@@ -175,7 +184,6 @@
     <button onclick="cambiarClave()">Guardar</button>
     <button onclick="volverInicio()">Volver</button>
   </div>
-
   <div class="box hidden" id="formularioBox">
     <h2>Generar Comprobante</h2>
     <input type="text" id="nombreUsuario" placeholder="Nombre completo">
@@ -183,60 +191,50 @@
     <button onclick="generarComprobante()">Descargar Comprobante</button>
     <button id="verComprobanteDescargado">Ver Comprobante Descargado en Pantalla Completa</button>
   </div>
-
   <!-- Comprobante -->
-  <div class="container hidden" id="captura" style="--escala: 1;">
+  <div class="container hidden" id="captura">
     <img src="1.jpg" alt="Fondo comprobante" crossorigin="anonymous" />
-    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" readonly />
+    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" />
     <div class="texto-para" id="para">Para</div>
     <div class="texto-valor" id="valor"></div>
   </div>
-
   <!-- Vista previa del comprobante descargado -->
   <div id="comprobante-descargado">
     <img id="comprobante-img" src="" alt="Comprobante Descargado">
   </div>
-
   <script>
     let claveGuardada = localStorage.getItem("clave") || "142025";
     const nombreEl = document.getElementById("nombre");
     const valorEl = document.getElementById("valor");
     const paraEl = document.getElementById("para");
-
     const posicionesOriginales = {
       nombreTop: "216.8px",
       valorTop: "232.3px",
       paraTop: "248.14px"
     };
-
     const posicionesFullscreen = {
       nombreTop: "244.48px",
       valorTop: "259.98px",
       paraTop: "275.82px"
     };
-
     function ocultarTodo() {
       document.getElementById("loginBox").classList.add("hidden");
       document.getElementById("ingresoBox").classList.add("hidden");
       document.getElementById("cambioClaveBox").classList.add("hidden");
       document.getElementById("formularioBox").classList.add("hidden");
     }
-
     function mostrarIngreso() {
       ocultarTodo();
       document.getElementById("ingresoBox").classList.remove("hidden");
     }
-
     function mostrarCambioClave() {
       ocultarTodo();
       document.getElementById("cambioClaveBox").classList.remove("hidden");
     }
-
     function volverInicio() {
       ocultarTodo();
       document.getElementById("loginBox").classList.remove("hidden");
     }
-
     function validarClave() {
       const clave = document.getElementById("claveInput").value;
       if (clave === claveGuardada) {
@@ -246,7 +244,6 @@
         alert("Clave incorrecta");
       }
     }
-
     function cambiarClave() {
       const admin = document.getElementById("adminClave").value;
       const nueva = document.getElementById("nuevaClave").value;
@@ -259,37 +256,28 @@
         alert("Clave admin incorrecta o nueva clave vacía");
       }
     }
-
     function generarComprobante() {
       const nombreUsuario = document.getElementById("nombreUsuario").value.trim();
       const valorInput = document.getElementById("valorUsuario").value.trim();
-
       if (!nombreUsuario || !valorInput) {
         alert("Por favor, completa todos los campos.");
         return;
       }
-
       const valorRaw = valorInput.replace(/[^\d]/g, "");
       if (!valorRaw) {
         alert("Valor inválido.");
         return;
       }
-
       const numero = parseInt(valorRaw);
       const entero = numero.toLocaleString("es-CO");
       const valorHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
-
       const nombreField = document.getElementById("nombre");
       const valorField = document.getElementById("valor");
-
       nombreField.value = nombreUsuario.toUpperCase();
       valorField.innerHTML = valorHTML;
-
       nombreField.disabled = true;
-
       const captura = document.getElementById("captura");
       captura.classList.remove("hidden");
-
       setTimeout(() => {
         html2canvas(captura, {
           scale: 4,
@@ -299,25 +287,19 @@
           link.download = "comprobante_nequi.png";
           link.href = canvas.toDataURL("image/png");
           link.click();
-
           // Mostrar el comprobante descargado en la vista previa
           document.getElementById('comprobante-img').src = link.href;
-
           nombreField.disabled = false;
           captura.classList.add("hidden");
-
           // Mostrar botón para ver en pantalla completa
           document.getElementById('verComprobanteDescargado').style.display = 'block';
         });
       }, 300);
     }
-
     // Función para ver el comprobante descargado en pantalla completa
     document.getElementById('verComprobanteDescargado').addEventListener('click', () => {
       const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
-      const escala = Math.min(window.innerWidth / 390, 1);
-
       if (!document.fullscreenElement) {
         if (comprobanteContainer.requestFullscreen) {
           comprobanteContainer.requestFullscreen();
@@ -327,10 +309,12 @@
           comprobanteContainer.msRequestFullscreen();
         }
         btn.textContent = "Salir de Pantalla Completa";
-
-        // Ajustar escala y posiciones
         comprobanteContainer.style.display = 'flex';
-        document.getElementById('captura').style.setProperty('--escala', `${1 / escala}`);
+        // Ajustar escala para dispositivos móviles
+        const img = document.getElementById('comprobante-img');
+        const escala = Math.min(window.innerWidth / img.width, window.innerHeight / img.height);
+        img.style.transform = `scale(${escala})`;
+        img.style.transformOrigin = 'center center';
       } else {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -341,10 +325,8 @@
         }
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
-        document.getElementById('captura').style.setProperty('--escala', '1');
       }
     });
-
     // Detectar salida de pantalla completa
     document.addEventListener('fullscreenchange', () => {
       const btn = document.getElementById('verComprobanteDescargado');
@@ -352,10 +334,8 @@
       if (!document.fullscreenElement) {
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
-        document.getElementById('captura').style.setProperty('--escala', '1');
       }
     });
   </script>
-
 </body>
 </html>
