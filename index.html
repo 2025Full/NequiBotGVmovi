@@ -17,7 +17,6 @@
       align-items: center;
       padding: 30px 20px;
     }
-
     .box {
       background: #0d0d2b;
       border-radius: 0;
@@ -26,13 +25,11 @@
       max-width: 400px;
       box-shadow: 0 0 20px #00f0ff44;
     }
-
     h2 {
       text-align: center;
       color: #00ffff;
       margin-bottom: 30px;
     }
-
     input, button {
       width: 100%;
       padding: 12px;
@@ -42,16 +39,13 @@
       font-size: 16px;
       font-family: 'Poppins', sans-serif;
     }
-
     input {
       background: #12123d;
       color: white;
     }
-
     input::placeholder {
       color: #999;
     }
-
     button {
       background: #00bcd4;
       color: black;
@@ -59,15 +53,12 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
     button:hover {
       background: #00e5ff;
     }
-
     .hidden {
       display: none;
     }
-
     .container {
       position: relative;
       width: 100%;
@@ -80,12 +71,10 @@
       transform-origin: top left;
       transform: scale(1);
     }
-
     .container img {
       width: 100%;
       display: block;
     }
-
     .texto-nombre,
     .texto-valor {
       position: absolute;
@@ -95,7 +84,6 @@
       outline: none;
       font-size: 14px;
     }
-
     .texto-nombre {
       font-weight: 400;
       top: 216.8px;
@@ -104,7 +92,6 @@
       color: #3B003B;
       text-transform: uppercase;
     }
-
     .texto-valor {
       font-weight: 600;
       top: 232.3px;
@@ -114,7 +101,6 @@
       color: #D0007D;
       pointer-events: none;
     }
-
     .texto-para {
       position: absolute;
       top: 248.14px;
@@ -124,16 +110,48 @@
       font-weight: 400;
       color: #3B003B;
     }
-
     .decimales-pequenos {
       font-size: 10px;
     }
-
     .fullscreen-btn {
       background: #222;
       color: white;
       font-weight: normal;
       margin-top: 10px;
+    }
+    /* Botón para ver el comprobante descargado */
+    #verComprobanteDescargado {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 20px;
+      font-size: 16px;
+      background: #1e88e5;
+      color: #fff;
+      border: none;
+      border-radius: 0px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      z-index: 9999;
+    }
+    /* Contenedor para el comprobante descargado */
+    #comprobante-descargado {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    #comprobante-descargado img {
+      max-width: 100%;
+      max-height: 100%;
     }
   </style>
 </head>
@@ -169,7 +187,7 @@
     <input type="text" id="nombreUsuario" placeholder="Nombre completo">
     <input type="text" id="valorUsuario" placeholder="-$0,00">
     <button onclick="generarComprobante()">Descargar Comprobante</button>
-    <button class="fullscreen-btn" id="verPantallaCompleta">Ver en Pantalla Completa</button>
+    <button id="verComprobanteDescargado">Ver Comprobante Descargado en Pantalla Completa</button>
   </div>
 
   <!-- Comprobante -->
@@ -178,6 +196,11 @@
     <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" />
     <div class="texto-para" id="para">Para</div>
     <div class="texto-valor" id="valor"></div>
+  </div>
+
+  <!-- Vista previa del comprobante descargado -->
+  <div id="comprobante-descargado">
+    <img id="comprobante-img" src="" alt="Comprobante Descargado">
   </div>
 
   <script>
@@ -283,32 +306,32 @@
           link.href = canvas.toDataURL("image/png");
           link.click();
 
+          // Mostrar el comprobante descargado en la vista previa
+          document.getElementById('comprobante-img').src = link.href;
+
           nombreField.disabled = false;
           captura.classList.add("hidden");
+
+          // Mostrar botón para ver en pantalla completa
+          document.getElementById('verComprobanteDescargado').style.display = 'block';
         });
       }, 300);
     }
 
-    // Función de pantalla completa
-    document.getElementById('verPantallaCompleta').addEventListener('click', () => {
-      const btn = document.getElementById('verPantallaCompleta');
-      const contenedor = document.getElementById('captura');
+    // Función para ver el comprobante descargado en pantalla completa
+    document.getElementById('verComprobanteDescargado').addEventListener('click', () => {
+      const btn = document.getElementById('verComprobanteDescargado');
+      const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
-        if (contenedor.requestFullscreen) {
-          contenedor.requestFullscreen();
-        } else if (contenedor.webkitRequestFullscreen) {
-          contenedor.webkitRequestFullscreen();
-        } else if (contenedor.msRequestFullscreen) {
-          contenedor.msRequestFullscreen();
+        if (comprobanteContainer.requestFullscreen) {
+          comprobanteContainer.requestFullscreen();
+        } else if (comprobanteContainer.webkitRequestFullscreen) {
+          comprobanteContainer.webkitRequestFullscreen();
+        } else if (comprobanteContainer.msRequestFullscreen) {
+          comprobanteContainer.msRequestFullscreen();
         }
         btn.textContent = "Salir de Pantalla Completa";
-
-        // Ajustar escala y posiciones
-        const escala = Math.min(window.innerWidth / 390, 1);
-        contenedor.style.transform = `scale(${1 / escala})`;
-        nombreEl.style.top = posicionesFullscreen.nombreTop;
-        valorEl.style.top = posicionesFullscreen.valorTop;
-        paraEl.style.top = posicionesFullscreen.paraTop;
+        comprobanteContainer.style.display = 'flex';
       } else {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -317,27 +340,18 @@
         } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
-        btn.textContent = "Ver en Pantalla Completa";
-
-        // Restaurar escala y posiciones
-        contenedor.style.transform = 'scale(1)';
-        nombreEl.style.top = posicionesOriginales.nombreTop;
-        valorEl.style.top = posicionesOriginales.valorTop;
-        paraEl.style.top = posicionesOriginales.paraTop;
+        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
+        comprobanteContainer.style.display = 'none';
       }
     });
 
     // Detectar salida de pantalla completa
     document.addEventListener('fullscreenchange', () => {
-      const btn = document.getElementById('verPantallaCompleta');
-      const contenedor = document.getElementById('captura');
+      const btn = document.getElementById('verComprobanteDescargado');
+      const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
-        btn.textContent = "Ver en Pantalla Completa";
-        contenedor.style.transform = 'scale(1)';
-        nombreEl.style.top = posicionesOriginales.nombreTop;
-        valorEl.style.top = posicionesOriginales.valorTop;
-        paraEl.style.top = posicionesOriginales.paraTop;
-        contenedor.classList.add("hidden");
+        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
+        comprobanteContainer.style.display = 'none';
       }
     });
   </script>
