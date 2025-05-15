@@ -86,7 +86,7 @@
     }
     .texto-nombre {
       font-weight: 400;
-      top: 216.8px;
+      top: calc(216.8px - 37.8px); /* Subido 1 cm */
       left: calc(20px + 0.7cm - 2mm + 8px);
       width: 48%;
       color: #3B003B;
@@ -94,7 +94,7 @@
     }
     .texto-valor {
       font-weight: 600;
-      top: 232.3px;
+      top: calc(232.3px - 37.8px); /* Subido 1 cm */
       right: 28px;
       width: 32%;
       text-align: right;
@@ -103,7 +103,7 @@
     }
     .texto-para {
       position: absolute;
-      top: 248.14px;
+      top: calc(248.14px - 37.8px); /* Subido 1 cm */
       left: calc(20px + 0.7cm + 11.34px - 2mm + 1.89px + 8px);
       font-family: 'Inter', sans-serif;
       font-size: 10px;
@@ -277,21 +277,14 @@
           const link = document.createElement("a");
           link.download = "comprobante_nequi.png";
           link.href = canvas.toDataURL("image/png");
-
-          // Compatibilidad con móviles: abrir en una nueva pestaña si es necesario
-          if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-            window.open(link.href, '_blank');
-          } else {
-            link.click();
-          }
+          link.click();
 
           // Mostrar el comprobante descargado en la vista previa
           document.getElementById('comprobante-img').src = link.href;
 
-          // Ocultar el contenedor de captura después de la descarga
           captura.classList.add("hidden");
 
-          // Mostrar el botón para ver en pantalla completa
+          // Mostrar botón para ver en pantalla completa
           document.getElementById('verComprobanteDescargado').style.display = 'block';
         });
       }, 300);
@@ -312,10 +305,6 @@
         }
 
         btn.textContent = "Salir de Pantalla Completa";
-
-        // Escalar el contenedor para dispositivos móviles
-        const escala = Math.min(window.innerWidth / 390, 1);
-        comprobanteContainer.style.transform = `scale(${1 / escala})`;
         comprobanteContainer.style.display = 'flex';
       } else {
         if (document.exitFullscreen) {
@@ -327,7 +316,6 @@
         }
 
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
-        comprobanteContainer.style.transform = 'scale(1)';
         comprobanteContainer.style.display = 'none';
       }
     });
@@ -339,7 +327,6 @@
 
       if (!document.fullscreenElement) {
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
-        comprobanteContainer.style.transform = 'scale(1)';
         comprobanteContainer.style.display = 'none';
       }
     });
