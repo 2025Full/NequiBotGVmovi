@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Comprobante Nequi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
   <style>
@@ -113,13 +113,7 @@
     .decimales-pequenos {
       font-size: 10px;
     }
-    .fullscreen-btn {
-      background: #222;
-      color: white;
-      font-weight: normal;
-      margin-top: 10px;
-    }
-    /* Botón para ver el comprobante descargado */
+    /* Estilos para el botón de pantalla completa */
     #verComprobanteDescargado {
       display: none;
       position: fixed;
@@ -152,12 +146,6 @@
     #comprobante-descargado img {
       max-width: 100%;
       max-height: 100%;
-    }
-    @media (max-width: 420px) {
-      .container {
-        width: 100vw;
-        height: 100vh;
-      }
     }
   </style>
 </head>
@@ -207,34 +195,29 @@
     const nombreEl = document.getElementById("nombre");
     const valorEl = document.getElementById("valor");
     const paraEl = document.getElementById("para");
-    const posicionesOriginales = {
-      nombreTop: "216.8px",
-      valorTop: "232.3px",
-      paraTop: "248.14px"
-    };
-    const posicionesFullscreen = {
-      nombreTop: "244.48px",
-      valorTop: "259.98px",
-      paraTop: "275.82px"
-    };
+
     function ocultarTodo() {
       document.getElementById("loginBox").classList.add("hidden");
       document.getElementById("ingresoBox").classList.add("hidden");
       document.getElementById("cambioClaveBox").classList.add("hidden");
       document.getElementById("formularioBox").classList.add("hidden");
     }
+
     function mostrarIngreso() {
       ocultarTodo();
       document.getElementById("ingresoBox").classList.remove("hidden");
     }
+
     function mostrarCambioClave() {
       ocultarTodo();
       document.getElementById("cambioClaveBox").classList.remove("hidden");
     }
+
     function volverInicio() {
       ocultarTodo();
       document.getElementById("loginBox").classList.remove("hidden");
     }
+
     function validarClave() {
       const clave = document.getElementById("claveInput").value;
       if (clave === claveGuardada) {
@@ -244,6 +227,7 @@
         alert("Clave incorrecta");
       }
     }
+
     function cambiarClave() {
       const admin = document.getElementById("adminClave").value;
       const nueva = document.getElementById("nuevaClave").value;
@@ -256,6 +240,7 @@
         alert("Clave admin incorrecta o nueva clave vacía");
       }
     }
+
     function generarComprobante() {
       const nombreUsuario = document.getElementById("nombreUsuario").value.trim();
       const valorInput = document.getElementById("valorUsuario").value.trim();
@@ -296,46 +281,60 @@
         });
       }, 300);
     }
-    // Función para ver el comprobante descargado en pantalla completa
+
+    // Función para manejar el modo pantalla completa
     document.getElementById('verComprobanteDescargado').addEventListener('click', () => {
       const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
-        if (comprobanteContainer.requestFullscreen) {
-          comprobanteContainer.requestFullscreen();
-        } else if (comprobanteContainer.webkitRequestFullscreen) {
-          comprobanteContainer.webkitRequestFullscreen();
-        } else if (comprobanteContainer.msRequestFullscreen) {
-          comprobanteContainer.msRequestFullscreen();
-        }
+        enterFullscreen(comprobanteContainer);
         btn.textContent = "Salir de Pantalla Completa";
         comprobanteContainer.style.display = 'flex';
-        // Ajustar escala para dispositivos móviles
-        const img = document.getElementById('comprobante-img');
-        const escala = Math.min(window.innerWidth / img.width, window.innerHeight / img.height);
-        img.style.transform = `scale(${escala})`;
-        img.style.transformOrigin = 'center center';
       } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
+        exitFullscreen();
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
     });
-    // Detectar salida de pantalla completa
-    document.addEventListener('fullscreenchange', () => {
+
+    function enterFullscreen(element) {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+      }
+    }
+
+    function exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
+
+    // Detectar cambios en el modo pantalla completa
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+    function handleFullscreenChange() {
       const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
-    });
+    }
   </script>
 </body>
 </html>
