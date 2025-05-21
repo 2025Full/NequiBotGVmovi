@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Comprobante Nequi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
   <style>
@@ -174,7 +174,7 @@
   <!-- Comprobante -->
   <div class="container hidden" id="captura">
     <img src="1.jpg" alt="Fondo comprobante" crossorigin="anonymous" />
-    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" />
+    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" readonly />
     <div class="texto-valor" id="valor"></div>
   </div>
   <!-- Vista previa del comprobante descargado -->
@@ -246,45 +246,45 @@
       const numero = parseInt(valorRaw);
       const entero = numero.toLocaleString("es-CO");
       const valorHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
-      const nombreField = document.getElementById("nombre");
-      const valorField = document.getElementById("valor");
-      nombreField.value = nombreUsuario.toUpperCase();
-      valorField.innerHTML = valorHTML;
+      
+      // Asignar valores a los campos
+      nombreEl.value = nombreUsuario.toUpperCase();
+      valorEl.innerHTML = valorHTML;
+
+      // Mostrar el contenedor del comprobante
       const captura = document.getElementById("captura");
       captura.classList.remove("hidden");
+
+      // Esperar un breve tiempo para asegurar que los valores se rendericen
       setTimeout(() => {
         html2canvas(captura, {
           scale: 4,
-          useCORS: true
+          useCORS: true,
+          logging: false,
+          allowTaint: false,
+          scrollY: -window.scrollY,
+          scrollX: -window.scrollX
         }).then(canvas => {
           const link = document.createElement("a");
           link.download = "comprobante_nequi.png";
           link.href = canvas.toDataURL("image/png");
           link.click();
+
           // Mostrar el comprobante descargado en la vista previa
           document.getElementById('comprobante-img').src = link.href;
           captura.classList.add("hidden");
+
           // Mostrar botón para ver en pantalla completa
           document.getElementById('verComprobanteDescargado').style.display = 'block';
         });
-      }, 300);
+      }, 500); // Aumentar el tiempo de espera si es necesario
     }
 
     // Función para ver el comprobante descargado en pantalla completa
     document.getElementById('verComprobanteDescargado').addEventListener('click', () => {
-      const comprobanteContainer = document.getElementById('comprobante-descargado');
       const btn = document.getElementById('verComprobanteDescargado');
-
+      const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
-        // Ajustar el contenedor para pantalla completa
-        comprobanteContainer.style.width = '100vw';
-        comprobanteContainer.style.height = '100vh';
-        comprobanteContainer.style.position = 'fixed';
-        comprobanteContainer.style.top = '0';
-        comprobanteContainer.style.left = '0';
-        comprobanteContainer.style.zIndex = '9999';
-
-        // Entrar en modo pantalla completa
         if (comprobanteContainer.requestFullscreen) {
           comprobanteContainer.requestFullscreen();
         } else if (comprobanteContainer.webkitRequestFullscreen) {
@@ -292,12 +292,9 @@
         } else if (comprobanteContainer.msRequestFullscreen) {
           comprobanteContainer.msRequestFullscreen();
         }
-
-        // Cambiar texto del botón
         btn.textContent = "Salir de Pantalla Completa";
         comprobanteContainer.style.display = 'flex';
       } else {
-        // Salir de pantalla completa
         if (document.exitFullscreen) {
           document.exitFullscreen();
         } else if (document.webkitExitFullscreen) {
@@ -305,14 +302,6 @@
         } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
-
-        // Restaurar estilos y texto del botón
-        comprobanteContainer.style.width = '';
-        comprobanteContainer.style.height = '';
-        comprobanteContainer.style.position = '';
-        comprobanteContainer.style.top = '';
-        comprobanteContainer.style.left = '';
-        comprobanteContainer.style.zIndex = '';
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
@@ -320,17 +309,9 @@
 
     // Detectar salida de pantalla completa
     document.addEventListener('fullscreenchange', () => {
-      const comprobanteContainer = document.getElementById('comprobante-descargado');
       const btn = document.getElementById('verComprobanteDescargado');
-
+      const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
-        // Restaurar estilos y texto del botón cuando se sale de pantalla completa
-        comprobanteContainer.style.width = '';
-        comprobanteContainer.style.height = '';
-        comprobanteContainer.style.position = '';
-        comprobanteContainer.style.top = '';
-        comprobanteContainer.style.left = '';
-        comprobanteContainer.style.zIndex = '';
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
