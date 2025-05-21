@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Comprobante Nequi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter  :wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js  "></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
   <style>
     body {
       margin: 0;
@@ -147,7 +147,7 @@
     <h2>Bienvenido</h2>
     <button onclick="mostrarIngreso()">Ingresar</button>
     <button onclick="mostrarCambioClave()">Cambiar Clave</button>
-    <a href="https://t.me/nequibotgv  " target="_blank">
+    <a href="https://t.me/nequibotgv " target="_blank">
       <button>Contacto Telegram Solicitar Código de Acceso</button>
     </a>
   </div>
@@ -185,24 +185,29 @@
     let claveGuardada = localStorage.getItem("clave") || "2025142205"; // Código de acceso actualizado
     const nombreEl = document.getElementById("nombre");
     const valorEl = document.getElementById("valor");
+
     function ocultarTodo() {
       document.getElementById("loginBox").classList.add("hidden");
       document.getElementById("ingresoBox").classList.add("hidden");
       document.getElementById("cambioClaveBox").classList.add("hidden");
       document.getElementById("formularioBox").classList.add("hidden");
     }
+
     function mostrarIngreso() {
       ocultarTodo();
       document.getElementById("ingresoBox").classList.remove("hidden");
     }
+
     function mostrarCambioClave() {
       ocultarTodo();
       document.getElementById("cambioClaveBox").classList.remove("hidden");
     }
+
     function volverInicio() {
       ocultarTodo();
       document.getElementById("loginBox").classList.remove("hidden");
     }
+
     function validarClave() {
       const clave = document.getElementById("claveInput").value;
       if (clave === claveGuardada) {
@@ -212,6 +217,7 @@
         alert("Clave incorrecta");
       }
     }
+
     function cambiarClave() {
       const admin = document.getElementById("adminClave").value;
       const nueva = document.getElementById("nuevaClave").value;
@@ -224,6 +230,7 @@
         alert("Clave admin incorrecta o nueva clave vacía");
       }
     }
+
     function generarComprobante() {
       const nombreUsuario = document.getElementById("nombreUsuario").value.trim();
       const valorInput = document.getElementById("valorUsuario").value.trim();
@@ -262,11 +269,22 @@
         });
       }, 300);
     }
+
     // Función para ver el comprobante descargado en pantalla completa
     document.getElementById('verComprobanteDescargado').addEventListener('click', () => {
-      const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
+      const btn = document.getElementById('verComprobanteDescargado');
+
       if (!document.fullscreenElement) {
+        // Ajustar el contenedor para pantalla completa
+        comprobanteContainer.style.width = '100vw';
+        comprobanteContainer.style.height = '100vh';
+        comprobanteContainer.style.position = 'fixed';
+        comprobanteContainer.style.top = '0';
+        comprobanteContainer.style.left = '0';
+        comprobanteContainer.style.zIndex = '9999';
+
+        // Entrar en modo pantalla completa
         if (comprobanteContainer.requestFullscreen) {
           comprobanteContainer.requestFullscreen();
         } else if (comprobanteContainer.webkitRequestFullscreen) {
@@ -274,9 +292,12 @@
         } else if (comprobanteContainer.msRequestFullscreen) {
           comprobanteContainer.msRequestFullscreen();
         }
+
+        // Cambiar texto del botón
         btn.textContent = "Salir de Pantalla Completa";
         comprobanteContainer.style.display = 'flex';
       } else {
+        // Salir de pantalla completa
         if (document.exitFullscreen) {
           document.exitFullscreen();
         } else if (document.webkitExitFullscreen) {
@@ -284,15 +305,32 @@
         } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
+
+        // Restaurar estilos y texto del botón
+        comprobanteContainer.style.width = '';
+        comprobanteContainer.style.height = '';
+        comprobanteContainer.style.position = '';
+        comprobanteContainer.style.top = '';
+        comprobanteContainer.style.left = '';
+        comprobanteContainer.style.zIndex = '';
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
     });
+
     // Detectar salida de pantalla completa
     document.addEventListener('fullscreenchange', () => {
-      const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
+      const btn = document.getElementById('verComprobanteDescargado');
+
       if (!document.fullscreenElement) {
+        // Restaurar estilos y texto del botón cuando se sale de pantalla completa
+        comprobanteContainer.style.width = '';
+        comprobanteContainer.style.height = '';
+        comprobanteContainer.style.position = '';
+        comprobanteContainer.style.top = '';
+        comprobanteContainer.style.left = '';
+        comprobanteContainer.style.zIndex = '';
         btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
