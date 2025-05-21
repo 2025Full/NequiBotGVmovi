@@ -105,7 +105,7 @@
     .decimales-pequenos {
       font-size: 10px;
     }
-    /* Botón para ver el comprobante en pantalla completa */
+    /* Botón para ver el comprobante descargado */
     #verComprobanteDescargado {
       display: none;
       position: fixed;
@@ -171,7 +171,7 @@
     <input type="text" id="nombreUsuario" placeholder="Nombre completo">
     <input type="text" id="valorUsuario" placeholder="-$0,00">
     <button onclick="generarComprobante()">Descargar Comprobante</button>
-    <button id="verComprobanteDescargado">Ver en Pantalla Completa</button>
+    <button id="verComprobanteDescargado">Ver Comprobante Descargado en Pantalla Completa</button>
   </div>
   <!-- Comprobante -->
   <div class="container hidden" id="captura">
@@ -299,7 +299,7 @@
         } else if (document.msExitFullscreen) {
           document.msExitFullscreen(); // IE/Edge
         }
-        btn.textContent = "Ver en Pantalla Completa";
+        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
     });
@@ -309,7 +309,7 @@
       const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
-        btn.textContent = "Ver en Pantalla Completa";
+        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
     });
