@@ -1,73 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Comprobante Nequi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
+  <meta charset="UTF-8">
+  <title>NequiBotGV - Generador</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
+      padding: 0;
       background: #000;
-      color: white;
+      font-family: 'Inter', sans-serif;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 30px 20px;
+      min-height: 100vh;
+      flex-direction: column;
     }
-    .box {
-      background: #0d0d2b;
-      border-radius: 0;
-      padding: 30px;
-      width: 100%;
+    .formulario {
+      background: #111;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 128, 255, 0.4);
+      width: 90%;
       max-width: 400px;
-      box-shadow: 0 0 20px #00f0ff44;
-    }
-    h2 {
       text-align: center;
-      color: #00ffff;
-      margin-bottom: 30px;
     }
-    input, button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 0;
-      border: none;
-      margin-bottom: 15px;
+    .titulo {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #0044cc, #00bfff);
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      margin-bottom: 20px;
+      text-shadow: 0px 0px 15px rgba(0, 191, 255, 0.8);
+    }
+    .input-campo {
+      width: 90%;
+      padding: 14px;
+      margin: 12px 0;
+      border: 1px solid #444;
+      border-radius: 12px;
       font-size: 16px;
-      font-family: 'Poppins', sans-serif;
+      background: #222;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
     }
-    input {
-      background: #12123d;
-      color: white;
-    }
-    input::placeholder {
-      color: #999;
-    }
-    button {
-      background: #00bcd4;
-      color: black;
-      font-weight: bold;
+    .boton {
+      margin-top: 10px;
+      padding: 14px;
+      width: 90%;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: all 0.4s ease;
+      color: #fff;
     }
-    button:hover {
-      background: #00e5ff;
-    }
-    .hidden {
-      display: none;
-    }
+    .boton:hover { opacity: 0.9; }
+    .boton-whatsapp { background: linear-gradient(90deg, #00c853, #00e676); }
+    .boton-clave { background: linear-gradient(90deg, #cc0000, #ff1744); }
+    .boton-cambiar { background: linear-gradient(90deg, #6a1b9a, #8e24aa); }
+    .boton-descargar { background: linear-gradient(90deg, #1976d2, #2196f3); }
     .container {
       position: relative;
       width: 100%;
       max-width: 390px;
+      margin: 20px auto;
       background: #fff;
-      border-radius: 0;
+      border-radius: 0px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      margin-top: 20px;
+      display: none;
       transform-origin: top left;
       transform: scale(1);
     }
@@ -75,24 +84,36 @@
       width: 100%;
       display: block;
     }
-    .texto-nombre,
-    .texto-valor {
+    .input-overlay {
       position: absolute;
-      font-family: 'Poppins', sans-serif;
-      background-color: transparent;
+      background: transparent;
       border: none;
-      outline: none;
-      font-size: 14px;
-    }
-    .texto-nombre {
+      font-size: 16px;
+      color: #2E1A47;
       font-weight: 400;
+      text-align: left;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Coordenadas precisas para los campos */
+    #nombre {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
       top: calc(216.8px - 37.8px + 19px + 11.34px + 3px);
       left: calc(20px + 0.7cm - 2mm + 8px + 4px - 2px);
       width: 48%;
       color: #3B003B;
       text-transform: uppercase;
     }
-    .texto-valor {
+
+    #valor {
+      font-family: 'Poppins', sans-serif;
       font-weight: 500;
       font-size: 13px;
       top: calc(232.3px - 37.8px + 19px + 15.12px + 3px + 3.78px);
@@ -102,11 +123,13 @@
       color: #a51c30;
       pointer-events: none;
     }
+
     .decimales-pequenos {
       font-size: 10px;
     }
-    /* Botón para ver el comprobante descargado */
-    #verComprobanteDescargado {
+
+    /* Botón para pantalla completa */
+    #verPantallaCompleta {
       display: none;
       position: fixed;
       bottom: 20px;
@@ -122,197 +145,192 @@
       font-weight: bold;
       z-index: 9999;
     }
-    /* Contenedor para el comprobante descargado */
-    #comprobante-descargado {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #fff;
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      overflow: auto;
-    }
-    #comprobante-descargado img {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
-    }
   </style>
 </head>
 <body>
-  <!-- Pantallas -->
-  <div class="box" id="loginBox">
-    <h2>Bienvenido</h2>
-    <button onclick="mostrarIngreso()">Ingresar</button>
-    <button onclick="mostrarCambioClave()">Cambiar Clave</button>
-    <a href="https://t.me/nequibotgv " target="_blank">
-      <button>Contacto Telegram Solicitar Código de Acceso</button>
-    </a>
-  </div>
-  <div class="box hidden" id="ingresoBox">
-    <h2>Ingresar</h2>
-    <input type="password" id="claveInput" placeholder="Clave de acceso">
-    <button onclick="validarClave()">Entrar</button>
-    <button onclick="volverInicio()">Volver</button>
-  </div>
-  <div class="box hidden" id="cambioClaveBox">
-    <h2>Cambiar Clave</h2>
-    <input type="password" id="adminClave" placeholder="Clave admin">
-    <input type="password" id="nuevaClave" placeholder="Nueva clave">
-    <button onclick="cambiarClave()">Guardar</button>
-    <button onclick="volverInicio()">Volver</button>
-  </div>
-  <div class="box hidden" id="formularioBox">
-    <h2>Generar Comprobante</h2>
-    <input type="text" id="nombreUsuario" placeholder="Nombre completo">
-    <input type="text" id="valorUsuario" placeholder="-$0,00">
-    <button onclick="generarComprobante()">Descargar Comprobante</button>
-    <button id="verComprobanteDescargado">Ver Comprobante Descargado en Pantalla Completa</button>
-  </div>
-  <!-- Comprobante -->
-  <div class="container hidden" id="captura">
-    <img src="1.jpg" alt="Fondo comprobante" crossorigin="anonymous" />
-    <input type="text" class="texto-nombre" id="nombre" placeholder="NOMBRE COMPLETO" readonly />
-    <div class="texto-valor" id="valor"></div>
-  </div>
-  <!-- Vista previa del comprobante descargado -->
-  <div id="comprobante-descargado">
-    <img id="comprobante-img" src="" alt="Comprobante Descargado">
-  </div>
-  <script>
-    let claveGuardada = localStorage.getItem("clave") || "2025142205"; // Código de acceso actualizado
-    const nombreEl = document.getElementById("nombre");
-    const valorEl = document.getElementById("valor");
 
-    function ocultarTodo() {
-      document.getElementById("loginBox").classList.add("hidden");
-      document.getElementById("ingresoBox").classList.add("hidden");
-      document.getElementById("cambioClaveBox").classList.add("hidden");
-      document.getElementById("formularioBox").classList.add("hidden");
+<div class="formulario" id="pantalla">
+  <div class="titulo">NequiBotGV</div>
+  <button id="whatsapp" class="boton boton-whatsapp">¿No tienes clave? Contáctanos</button>
+  <button id="clave-ingreso" class="boton boton-clave">Ingresar Clave</button>
+  <button id="cambiar-clave-boton" class="boton boton-cambiar">Cambiar Clave</button>
+  <div id="contenido-oculto" style="display: none;">
+    <!-- Nuevos campos -->
+    <input type="text" id="input-nombre" class="input-campo" placeholder="Nombre completo">
+    <input type="text" id="input-valor" class="input-campo" placeholder="-$0,00">
+    <button id="generar" class="boton boton-descargar">Generar Comprobante</button>
+    <div id="admin-panel" style="display: none;">
+      <input type="text" id="nueva-clave" class="input-campo" placeholder="Nueva clave de acceso">
+      <button id="guardar-nueva-clave" class="boton">Guardar Nueva Clave</button>
+    </div>
+  </div>
+</div>
+
+<!-- Contenedor de comprobante -->
+<div class="container" id="captura">
+  <img src="1.jpg" alt="Fondo" id="imagen-fondo">
+  <input type="text" id="nombre" class="input-overlay" readonly>
+  <div id="valor" class="input-overlay"></div>
+</div>
+
+<button id="verPantallaCompleta">Ver en Pantalla Completa</button>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js "></script>
+<script>
+let claveAcceso = "2025142205";
+const claveAdmin = "1395";
+
+// Eventos principales
+document.getElementById('whatsapp').addEventListener('click', () => {
+  window.open('https://wa.me/573178793834?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20la%20clave%20de%20NequiBotGV. ', '_blank');
+});
+
+document.getElementById('clave-ingreso').addEventListener('click', () => {
+  const clave = prompt("Ingrese la clave de acceso:");
+  if (clave === claveAdmin) {
+    document.getElementById('admin-panel').style.display = 'block';
+    mostrarFormulario();
+  } else if (clave === claveAcceso) {
+    mostrarFormulario();
+  } else {
+    alert("Clave incorrecta. Acceso denegado.");
+  }
+});
+
+document.getElementById('cambiar-clave-boton').addEventListener('click', () => {
+  const clave = prompt("Ingrese la clave de administrador:");
+  if (clave === claveAdmin) {
+    document.getElementById('admin-panel').style.display = 'block';
+    mostrarFormulario();
+  } else {
+    alert("Clave de administrador incorrecta.");
+  }
+});
+
+function mostrarFormulario() {
+  document.getElementById('contenido-oculto').style.display = 'block';
+  document.getElementById('whatsapp').style.display = 'none';
+  document.getElementById('clave-ingreso').style.display = 'none';
+  document.getElementById('cambiar-clave-boton').style.display = 'none';
+}
+
+document.getElementById('guardar-nueva-clave').addEventListener('click', () => {
+  const nueva = document.getElementById('nueva-clave').value.trim();
+  if (nueva) {
+    claveAcceso = nueva;
+    alert("Clave de acceso actualizada exitosamente.");
+    document.getElementById('nueva-clave').value = "";
+  }
+});
+
+document.getElementById('generar').addEventListener('click', () => {
+  if (!validarEntradas()) return;
+
+  const container = document.getElementById('captura');
+  const img = document.querySelector('#captura img');
+
+  const escala = Math.min(window.innerWidth / 390, 1);
+  container.style.setProperty('--escala', escala);
+  document.getElementById('pantalla').style.display = 'none';
+  container.style.display = 'block';
+
+  // Asignar valores a los campos superpuestos
+  document.getElementById('nombre').value = document.getElementById('input-nombre').value.toUpperCase();
+
+  const valorInput = document.getElementById('input-valor').value.replace(/[^\d]/g, "");
+  const entero = parseInt(valorInput).toLocaleString("es-CO");
+  document.getElementById('valor').innerHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
+
+  // Verificar carga de imagen
+  if (!img.complete || !img.naturalWidth) {
+    alert("La imagen de fondo no se ha cargado completamente. Inténtalo nuevamente.");
+    return;
+  }
+
+  // Mostrar botón de pantalla completa
+  document.getElementById('verPantallaCompleta').style.display = 'block';
+
+  // Descargar automáticamente el comprobante
+  descargarComprobante();
+});
+
+document.getElementById('verPantallaCompleta').addEventListener('click', () => {
+  const contenedor = document.getElementById('captura');
+  const btn = document.getElementById('verPantallaCompleta');
+  if (!document.fullscreenElement) {
+    if (contenedor.requestFullscreen) {
+      contenedor.requestFullscreen();
+    } else if (contenedor.webkitRequestFullscreen) {
+      contenedor.webkitRequestFullscreen();
+    } else if (contenedor.msRequestFullscreen) {
+      contenedor.msRequestFullscreen();
     }
-
-    function mostrarIngreso() {
-      ocultarTodo();
-      document.getElementById("ingresoBox").classList.remove("hidden");
+    const escala = Math.min(window.innerWidth / 390, 1);
+    contenedor.style.transform = `scale(${1 / escala})`;
+    btn.textContent = "Salir de Pantalla Completa";
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
     }
+    contenedor.style.transform = 'scale(1)';
+    btn.textContent = "Ver en Pantalla Completa";
+  }
+});
 
-    function mostrarCambioClave() {
-      ocultarTodo();
-      document.getElementById("cambioClaveBox").classList.remove("hidden");
-    }
+document.addEventListener('fullscreenchange', () => {
+  const contenedor = document.getElementById('captura');
+  const btn = document.getElementById('verPantallaCompleta');
+  if (!document.fullscreenElement) {
+    contenedor.style.transform = 'scale(1)';
+    btn.textContent = "Ver en Pantalla Completa";
+  }
+});
 
-    function volverInicio() {
-      ocultarTodo();
-      document.getElementById("loginBox").classList.remove("hidden");
-    }
+// Validaciones
+function validarEntradas() {
+  const nombre = document.getElementById('input-nombre').value.trim();
+  const valor = document.getElementById('input-valor').value.trim();
+  if (!nombre || !valor) {
+    alert("Todos los campos son obligatorios.");
+    return false;
+  }
+  return true;
+}
 
-    function validarClave() {
-      const clave = document.getElementById("claveInput").value;
-      if (clave === claveGuardada) {
-        ocultarTodo();
-        document.getElementById("formularioBox").classList.remove("hidden");
+function descargarComprobante() {
+  const img = document.querySelector('#captura img');
+  if (!img.complete || !img.naturalWidth) {
+    alert("La imagen de fondo no se ha cargado completamente. Inténtalo nuevamente.");
+    return;
+  }
+
+  html2canvas(document.getElementById('captura'), {
+    scale: 2,
+    logging: false,
+    useCORS: true,
+    allowTaint: false,
+    scrollY: -window.scrollY,
+    scrollX: -window.scrollX
+  }).then(canvas => {
+    try {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL(`image/png`);
+      link.download = `comprobante.png`;
+      if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+        window.open(link.href, '_blank');
       } else {
-        alert("Clave incorrecta");
+        link.click();
       }
+    } catch (error) {
+      console.error("Error al descargar el comprobante:", error);
+      alert("Ocurrió un error al generar el comprobante. Inténtalo nuevamente.");
     }
-
-    function cambiarClave() {
-      const admin = document.getElementById("adminClave").value;
-      const nueva = document.getElementById("nuevaClave").value;
-      if (admin === "1395" && nueva.trim()) {
-        localStorage.setItem("clave", nueva.trim());
-        claveGuardada = nueva.trim();
-        alert("Clave cambiada correctamente");
-        volverInicio();
-      } else {
-        alert("Clave admin incorrecta o nueva clave vacía");
-      }
-    }
-
-    function generarComprobante() {
-      const nombreUsuario = document.getElementById("nombreUsuario").value.trim();
-      const valorInput = document.getElementById("valorUsuario").value.trim();
-      if (!nombreUsuario || !valorInput) {
-        alert("Por favor, completa todos los campos.");
-        return;
-      }
-      const valorRaw = valorInput.replace(/[^\d]/g, "");
-      if (!valorRaw) {
-        alert("Valor inválido.");
-        return;
-      }
-      const numero = parseInt(valorRaw);
-      const entero = numero.toLocaleString("es-CO");
-      const valorHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
-      // Asignar valores a los campos
-      nombreEl.value = nombreUsuario.toUpperCase();
-      valorEl.innerHTML = valorHTML;
-      // Mostrar el contenedor del comprobante
-      const captura = document.getElementById("captura");
-      captura.classList.remove("hidden");
-      // Esperar un breve tiempo para asegurar que los valores se rendericen
-      setTimeout(() => {
-        html2canvas(captura, {
-          scale: 4,
-          useCORS: true,
-          logging: false,
-          allowTaint: false,
-          scrollY: -window.scrollY,
-          scrollX: -window.scrollX
-        }).then(canvas => {
-          const link = document.createElement("a");
-          link.download = "comprobante_nequi.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-          // Mostrar el comprobante descargado en la vista previa
-          document.getElementById('comprobante-img').src = link.href;
-          captura.classList.add("hidden");
-          // Mostrar botón para ver en pantalla completa
-          document.getElementById('verComprobanteDescargado').style.display = 'block';
-        });
-      }, 500); // Aumentar el tiempo de espera si es necesario
-    }
-
-    // Función para ver el comprobante descargado en pantalla completa
-    document.getElementById('verComprobanteDescargado').addEventListener('click', () => {
-      const btn = document.getElementById('verComprobanteDescargado');
-      const comprobanteContainer = document.getElementById('comprobante-descargado');
-      if (!document.fullscreenElement) {
-        if (comprobanteContainer.requestFullscreen) {
-          comprobanteContainer.requestFullscreen();
-        } else if (comprobanteContainer.webkitRequestFullscreen) {
-          comprobanteContainer.webkitRequestFullscreen(); // Safari
-        } else if (comprobanteContainer.msRequestFullscreen) {
-          comprobanteContainer.msRequestFullscreen(); // IE/Edge
-        }
-        btn.textContent = "Salir de Pantalla Completa";
-        comprobanteContainer.style.display = 'flex';
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen(); // Safari
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen(); // IE/Edge
-        }
-        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
-        comprobanteContainer.style.display = 'none';
-      }
-    });
-
-    // Detectar salida de pantalla completa
-    document.addEventListener('fullscreenchange', () => {
-      const btn = document.getElementById('verComprobanteDescargado');
-      const comprobanteContainer = document.getElementById('comprobante-descargado');
-      if (!document.fullscreenElement) {
-        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
-        comprobanteContainer.style.display = 'none';
-      }
-    });
-  </script>
+  });
+}
+</script>
 </body>
 </html>
