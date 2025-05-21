@@ -86,26 +86,26 @@
     }
     .texto-nombre {
       font-weight: 400;
-      top: calc(216.8px - 37.8px + 19px + 11.34px + 3px); /* Mantenido igual */
-      left: calc(20px + 0.7cm - 2mm + 8px + 4px - 2px); /* Mantenido igual */
+      top: calc(216.8px - 37.8px + 19px + 11.34px + 3px);
+      left: calc(20px + 0.7cm - 2mm + 8px + 4px - 2px);
       width: 48%;
       color: #3B003B;
       text-transform: uppercase;
     }
     .texto-valor {
-      font-weight: 500; /* Cambiado de 600 a 500 */
-      font-size: 13px; /* Reducido de 14px a 13px */
-      top: calc(232.3px - 37.8px + 19px + 15.12px + 3px + 3.78px); /* Mantenido igual */
+      font-weight: 500;
+      font-size: 13px;
+      top: calc(232.3px - 37.8px + 19px + 15.12px + 3px + 3.78px);
       right: 28px;
       width: 32%;
       text-align: right;
-      color: #a51c30; /* Mantenido igual */
+      color: #a51c30;
       pointer-events: none;
     }
     .decimales-pequenos {
       font-size: 10px;
     }
-    /* Botón para ver el comprobante descargado */
+    /* Botón para ver el comprobante en pantalla completa */
     #verComprobanteDescargado {
       display: none;
       position: fixed;
@@ -117,7 +117,7 @@
       background: #1e88e5;
       color: #fff;
       border: none;
-      border-radius: 0px;
+      border-radius: 12px;
       font-family: 'Inter', sans-serif;
       font-weight: bold;
       z-index: 9999;
@@ -134,10 +134,12 @@
       z-index: 9999;
       justify-content: center;
       align-items: center;
+      overflow: auto;
     }
     #comprobante-descargado img {
-      max-width: 100%;
-      max-height: 100%;
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
     }
   </style>
 </head>
@@ -169,7 +171,7 @@
     <input type="text" id="nombreUsuario" placeholder="Nombre completo">
     <input type="text" id="valorUsuario" placeholder="-$0,00">
     <button onclick="generarComprobante()">Descargar Comprobante</button>
-    <button id="verComprobanteDescargado">Ver Comprobante Descargado en Pantalla Completa</button>
+    <button id="verComprobanteDescargado">Ver en Pantalla Completa</button>
   </div>
   <!-- Comprobante -->
   <div class="container hidden" id="captura">
@@ -246,15 +248,12 @@
       const numero = parseInt(valorRaw);
       const entero = numero.toLocaleString("es-CO");
       const valorHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
-      
       // Asignar valores a los campos
       nombreEl.value = nombreUsuario.toUpperCase();
       valorEl.innerHTML = valorHTML;
-
       // Mostrar el contenedor del comprobante
       const captura = document.getElementById("captura");
       captura.classList.remove("hidden");
-
       // Esperar un breve tiempo para asegurar que los valores se rendericen
       setTimeout(() => {
         html2canvas(captura, {
@@ -269,11 +268,9 @@
           link.download = "comprobante_nequi.png";
           link.href = canvas.toDataURL("image/png");
           link.click();
-
           // Mostrar el comprobante descargado en la vista previa
           document.getElementById('comprobante-img').src = link.href;
           captura.classList.add("hidden");
-
           // Mostrar botón para ver en pantalla completa
           document.getElementById('verComprobanteDescargado').style.display = 'block';
         });
@@ -288,9 +285,9 @@
         if (comprobanteContainer.requestFullscreen) {
           comprobanteContainer.requestFullscreen();
         } else if (comprobanteContainer.webkitRequestFullscreen) {
-          comprobanteContainer.webkitRequestFullscreen();
+          comprobanteContainer.webkitRequestFullscreen(); // Safari
         } else if (comprobanteContainer.msRequestFullscreen) {
-          comprobanteContainer.msRequestFullscreen();
+          comprobanteContainer.msRequestFullscreen(); // IE/Edge
         }
         btn.textContent = "Salir de Pantalla Completa";
         comprobanteContainer.style.display = 'flex';
@@ -298,11 +295,11 @@
         if (document.exitFullscreen) {
           document.exitFullscreen();
         } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
+          document.webkitExitFullscreen(); // Safari
         } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
+          document.msExitFullscreen(); // IE/Edge
         }
-        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
+        btn.textContent = "Ver en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
     });
@@ -312,7 +309,7 @@
       const btn = document.getElementById('verComprobanteDescargado');
       const comprobanteContainer = document.getElementById('comprobante-descargado');
       if (!document.fullscreenElement) {
-        btn.textContent = "Ver Comprobante Descargado en Pantalla Completa";
+        btn.textContent = "Ver en Pantalla Completa";
         comprobanteContainer.style.display = 'none';
       }
     });
