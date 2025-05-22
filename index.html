@@ -141,6 +141,32 @@
       font-weight: bold;
       z-index: 9999;
     }
+    /* Ajustes cuando está en pantalla completa */
+    .fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      z-index: 9999;
+    }
+    .fullscreen .container {
+      width: 100%;
+      max-width: 100%;
+      transform: scale(1);
+    }
+    .fullscreen .container img {
+      width: 100%;
+      height: auto;
+    }
+    .fullscreen #nombre,
+    .fullscreen #valor {
+      transform: scale(1);
+    }
   </style>
 </head>
 <body>
@@ -247,7 +273,6 @@ document.getElementById('generar').addEventListener('click', () => {
 document.getElementById('verPantallaCompleta').addEventListener('click', () => {
   const contenedor = document.getElementById('captura');
   const btn = document.getElementById('verPantallaCompleta');
-
   if (!document.fullscreenElement) {
     if (contenedor.requestFullscreen) {
       contenedor.requestFullscreen();
@@ -256,6 +281,7 @@ document.getElementById('verPantallaCompleta').addEventListener('click', () => {
     } else if (contenedor.msRequestFullscreen) {
       contenedor.msRequestFullscreen();
     }
+    contenedor.classList.add("fullscreen"); // Agregar clase para ajustar estilos
     btn.textContent = "Salir de Pantalla Completa";
   } else {
     if (document.exitFullscreen) {
@@ -265,6 +291,7 @@ document.getElementById('verPantallaCompleta').addEventListener('click', () => {
     } else if (document.msExitFullscreen) {
       document.msExitFullscreen();
     }
+    contenedor.classList.remove("fullscreen"); // Remover clase al salir de pantalla completa
     btn.textContent = "Ver en Pantalla Completa";
   }
 });
@@ -273,6 +300,7 @@ document.addEventListener('fullscreenchange', () => {
   const contenedor = document.getElementById('captura');
   const btn = document.getElementById('verPantallaCompleta');
   if (!document.fullscreenElement) {
+    contenedor.classList.remove("fullscreen");
     btn.textContent = "Ver en Pantalla Completa";
   }
 });
