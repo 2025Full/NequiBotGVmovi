@@ -103,9 +103,9 @@
     #nombre {
       font-family: 'Poppins', sans-serif;
       font-weight: 400;
-      font-size: 13px;
-      top: calc(216.8px - 37.8px + 19px + 11.34px + 3px - 1.89px); /* Subido 0.5mm (1.89px) */
-      left: calc(20px + 0.7cm - 2mm + 8px + 4px - 2px);
+      font-size: 14px;
+      top: calc(216.8px - 37.8px + 19px + 11.34px + 3px + 12px); /* Bajado 7px adicionales (5px + 7px) */
+      left: calc(20px + 0.7cm - 2mm + 8px + 4px - 2px + 10px); /* Movido 5px a la izquierda (15px - 5px) */
       width: 48%;
       color: #3B003B;
       text-transform: uppercase;
@@ -114,39 +114,15 @@
       font-family: 'Poppins', sans-serif;
       font-weight: 500;
       font-size: 13px;
-      top: calc(232.3px - 37.8px + 19px + 15.12px + 3px + 3.78px - 3.78px); /* Subido 1mm (3.78px) */
+      top: calc(232.3px - 37.8px + 19px + 15.12px + 3px + 3.78px);
       right: 28px;
       width: 32%;
       text-align: right;
       color: #a51c30;
       pointer-events: none;
     }
-    /* Ajustes en pantalla completa */
-    .fullscreen #nombre {
-      left: calc(20px + 0.7cm - 2mm + 8px + 4px - 2px + 4px); /* Mover 4px a la derecha */
-    }
-    .fullscreen #valor {
-      top: calc(232.3px - 37.8px + 19px + 15.12px + 3px + 3.78px - 10px - 3.78px); /* Subido 1mm (3.78px) */
-    }
     .decimales-pequenos {
       font-size: 10px;
-    }
-    /* Botón para pantalla completa */
-    #verPantallaCompleta {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 20px;
-      font-size: 16px;
-      background: #1e88e5;
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Inter', sans-serif;
-      font-weight: bold;
-      z-index: 9999;
     }
   </style>
 </head>
@@ -173,14 +149,13 @@
   <input type="text" id="nombre" class="input-overlay" readonly>
   <div id="valor" class="input-overlay"></div>
 </div>
-<button id="verPantallaCompleta">Ver en Pantalla Completa</button>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js  "></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js "></script>
 <script>
 let claveAcceso = "2025142205";
 const claveAdmin = "1395";
 // Eventos principales
 document.getElementById('whatsapp').addEventListener('click', () => {
-  window.open('https://wa.me/573178793834?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20la%20clave%20de%20NequiBotGV.  ', '_blank');
+  window.open('https://wa.me/573178793834?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20la%20clave%20de%20NequiBotGV. ', '_blank');
 });
 document.getElementById('clave-ingreso').addEventListener('click', () => {
   const clave = prompt("Ingrese la clave de acceso:");
@@ -234,43 +209,8 @@ document.getElementById('generar').addEventListener('click', () => {
     alert("La imagen de fondo no se ha cargado completamente. Inténtalo nuevamente.");
     return;
   }
-  // Mostrar botón de pantalla completa
-  document.getElementById('verPantallaCompleta').style.display = 'block';
   // Descargar automáticamente el comprobante
   descargarComprobante();
-});
-document.getElementById('verPantallaCompleta').addEventListener('click', () => {
-  const contenedor = document.getElementById('captura');
-  const btn = document.getElementById('verPantallaCompleta');
-  if (!document.fullscreenElement) {
-    if (contenedor.requestFullscreen) {
-      contenedor.requestFullscreen();
-    } else if (contenedor.webkitRequestFullscreen) {
-      contenedor.webkitRequestFullscreen();
-    } else if (contenedor.msRequestFullscreen) {
-      contenedor.msRequestFullscreen();
-    }
-    contenedor.classList.add("fullscreen"); // Agregar clase para ajustar estilos
-    btn.textContent = "Salir de Pantalla Completa";
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-    contenedor.classList.remove("fullscreen"); // Remover clase al salir de pantalla completa
-    btn.textContent = "Ver en Pantalla Completa";
-  }
-});
-document.addEventListener('fullscreenchange', () => {
-  const contenedor = document.getElementById('captura');
-  const btn = document.getElementById('verPantallaCompleta');
-  if (!document.fullscreenElement) {
-    contenedor.classList.remove("fullscreen");
-    btn.textContent = "Ver en Pantalla Completa";
-  }
 });
 // Validaciones
 function validarEntradas() {
