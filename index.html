@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>NequiBotGV - Generador</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter  :wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -118,7 +118,7 @@
       right: 28px;
       width: 32%;
       text-align: right;
-      color: #a51c30;
+      color: #b32b3e; /* Cambiado a un tono más claro */
       pointer-events: none;
     }
     .decimales-pequenos {
@@ -193,16 +193,14 @@
   <div id="valor" class="input-overlay"></div>
 </div>
 <button id="verPantallaCompleta">Ver en Pantalla Completa</button>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js "></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js  "></script>
 <script>
 let claveAcceso = "2025142205";
 const claveAdmin = "1395";
-
 // Eventos principales
 document.getElementById('whatsapp').addEventListener('click', () => {
-  window.open('https://wa.me/573178793834?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20la%20clave%20de%20NequiBotGV. ', '_blank');
+  window.open('https://wa.me/573178793834?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20la%20clave%20de%20NequiBotGV.  ', '_blank');
 });
-
 document.getElementById('clave-ingreso').addEventListener('click', () => {
   const clave = prompt("Ingrese la clave de acceso:");
   if (clave === claveAdmin) {
@@ -214,7 +212,6 @@ document.getElementById('clave-ingreso').addEventListener('click', () => {
     alert("Clave incorrecta. Acceso denegado.");
   }
 });
-
 document.getElementById('cambiar-clave-boton').addEventListener('click', () => {
   const clave = prompt("Ingrese la clave de administrador:");
   if (clave === claveAdmin) {
@@ -224,14 +221,12 @@ document.getElementById('cambiar-clave-boton').addEventListener('click', () => {
     alert("Clave de administrador incorrecta.");
   }
 });
-
 function mostrarFormulario() {
   document.getElementById('contenido-oculto').style.display = 'block';
   document.getElementById('whatsapp').style.display = 'none';
   document.getElementById('clave-ingreso').style.display = 'none';
   document.getElementById('cambiar-clave-boton').style.display = 'none';
 }
-
 document.getElementById('guardar-nueva-clave').addEventListener('click', () => {
   const nueva = document.getElementById('nueva-clave').value.trim();
   if (nueva) {
@@ -240,7 +235,6 @@ document.getElementById('guardar-nueva-clave').addEventListener('click', () => {
     document.getElementById('nueva-clave').value = "";
   }
 });
-
 document.getElementById('generar').addEventListener('click', () => {
   if (!validarEntradas()) return;
   const container = document.getElementById('captura');
@@ -249,26 +243,21 @@ document.getElementById('generar').addEventListener('click', () => {
   container.style.setProperty('--escala', escala);
   document.getElementById('pantalla').style.display = 'none';
   container.style.display = 'block';
-
   // Asignar valores a los campos superpuestos
   document.getElementById('nombre').value = document.getElementById('input-nombre').value.toUpperCase();
   const valorInput = document.getElementById('input-valor').value.replace(/[^\d]/g, "");
   const entero = parseInt(valorInput).toLocaleString("es-CO");
   document.getElementById('valor').innerHTML = `-$${entero},<span class="decimales-pequenos">00</span>`;
-
   // Verificar carga de imagen
   if (!img.complete || !img.naturalWidth) {
     alert("La imagen de fondo no se ha cargado completamente. Inténtalo nuevamente.");
     return;
   }
-
   // Mostrar botón de pantalla completa
   document.getElementById('verPantallaCompleta').style.display = 'block';
-
   // Descargar automáticamente el comprobante
   descargarComprobante();
 });
-
 // Botón para pantalla completa
 document.getElementById('verPantallaCompleta').addEventListener('click', () => {
   const contenedor = document.getElementById('captura');
@@ -295,7 +284,6 @@ document.getElementById('verPantallaCompleta').addEventListener('click', () => {
     btn.textContent = "Ver en Pantalla Completa";
   }
 });
-
 document.addEventListener('fullscreenchange', () => {
   const contenedor = document.getElementById('captura');
   const btn = document.getElementById('verPantallaCompleta');
@@ -304,7 +292,6 @@ document.addEventListener('fullscreenchange', () => {
     btn.textContent = "Ver en Pantalla Completa";
   }
 });
-
 // Validaciones
 function validarEntradas() {
   const nombre = document.getElementById('input-nombre').value.trim();
@@ -315,7 +302,6 @@ function validarEntradas() {
   }
   return true;
 }
-
 function descargarComprobante() {
   const img = document.querySelector('#captura img');
   if (!img.complete || !img.naturalWidth) {
